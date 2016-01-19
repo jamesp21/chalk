@@ -5,6 +5,7 @@ var supportsColor = require('supports-color');
 var defineProps = Object.defineProperties;
 var isSimpleWindowsTerm = process.platform === 'win32' && !/^xterm/i.test(process.env.TERM);
 
+/*This is the @constructor that takes a param of the description that you want your sentence to look like, if no @param is given, it's set automatically */
 function Chalk(options) {
 	// detect mode if not set manually
 	this.enabled = !options || options.enabled === undefined ? supportsColor : options.enabled;
@@ -17,6 +18,7 @@ if (isSimpleWindowsTerm) {
 
 var styles = {};
 
+/*This takes style/property names from another source and puts them into a local variable */
 Object.keys(ansiStyles).forEach(function (key) {
 	ansiStyles[key].closeRe = new RegExp(escapeStringRegexp(ansiStyles[key].close), 'g');
 
@@ -29,6 +31,7 @@ Object.keys(ansiStyles).forEach(function (key) {
 
 var proto = defineProps(function chalk() {}, styles);
 
+/*The @param takes in the list of styles and assigns the the property to that style and @returns the function of styles */
 function build(_styles) {
 	var builder = function () {
 		return applyStyle.apply(builder, arguments);
@@ -44,6 +47,7 @@ function build(_styles) {
 	return builder;
 }
 
+/* This function applys the specific characteristics to the sentence/text and @returns a string*/
 function applyStyle() {
 	// support varags, but simply cast to string in case there's only one arg
 	var args = arguments;
